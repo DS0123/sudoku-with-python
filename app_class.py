@@ -6,7 +6,7 @@ class App:
         pygame.init()
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         self.running = True
-        self.grid = testBoard
+        self.grid = testBoard1
 
     def run(self):
         while self.running:
