@@ -4,6 +4,7 @@ HEIGHT = 600
 # Colours
 WHITE = (255,255,255)
 BLACK = (0,0,0)
+LIGHTBLUE = (96, 216, 232)
 
 # Boards
 testBoard1 = [[0 for x in range(9)] for x in range(9)]
@@ -20,3 +21,4 @@ testBoard2 = [[0,6,0,2,0,0,8,3,1],
 # Positions and sizes
 gridPos = (75,100)
 cellSize = 50
+gridSize = cellSize*9
