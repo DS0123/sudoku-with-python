@@ -7,14 +7,13 @@ class App:
         pygame.init()
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         self.running = True
-        self.grid = testBoard2
+        self.grid = testBoard1
         self.selected = None
         self.mousePos = None
         self.state = "playing"
         self.playingButtons = []
         self.menuButtons = []
         self.endButtons = []
-        self.font = pygame.font.SysFont("arial", cellSize//2)
         self.loadButtons()
 
     def run(self):
@@ -54,7 +53,6 @@ class App:
         if self.selected:
             self.drawSelection(self.window, self.selected)
 
-        self.showNumbers(self.window, self.grid)
         self.drawGrid(self.window)
         pygame.display.update()
 
@@ -82,15 +80,3 @@ class App:
 
     def loadButtons(self):
         self.playingButtons.append(Button(20, 40, 100, 40))
-
-    def showNumbers(self, window, numbers):
-        for yidx, row in enumerate(numbers):
-            for xidx, number in enumerate(row):
-                if number != 0:
-                    self.textToScreen(str(number), (xidx, yidx), window)
-
-    def textToScreen(self, text, pos, window):
-        text = self.font.render(text, False, BLACK)
-        buffer = [(cellSize - text.get_width())//2, (cellSize-text.get_height())//2]
-
-        window.blit(text, (pos[0]*cellSize+gridPos[0]+buffer[0], pos[1]*cellSize+gridPos[1]+buffer[1]))
