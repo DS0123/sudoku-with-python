@@ -54,11 +54,8 @@ class App:
         if self.selected:
             self.drawSelection(self.window, self.selected)
 
-<<<<<<< HEAD
-=======
         self.drawNumbers(self.window)
 
->>>>>>> part3
         self.drawGrid(self.window)
         pygame.display.update()
 
