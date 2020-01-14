@@ -14,8 +14,9 @@ class App:
         self.playingButtons = []
         self.menuButtons = []
         self.endButtons = []
+        self.lockedCells = []
         self.font = pygame.font.SysFont("arial", cellSize//2)
-        self.loadButtons()
+        self.load()
 
     def run(self):
         while self.running:
@@ -32,6 +33,8 @@ class App:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+
+            # User clicks
             if event.type == pygame.MOUSEBUTTONDOWN:
                 selected = self.mouseOnGrid()
                 if selected:
@@ -39,6 +42,12 @@ class App:
                 else:
                     print("not on board")
                     self.selected = None
+
+            # User types a key
+            if event.type == pygame.KEYDOWN:
+                if self.selected != None and self.selected not in self.lockedCells:
+                    if self.isInt(event.unicode):
+                        self.grid[self.selected[1]][self.selected[0]] = int(event.unicode)
 
     def playing_update(self):
         self.mousePos = pygame.mouse.get_pos()
@@ -54,12 +63,17 @@ class App:
         if self.selected:
             self.drawSelection(self.window, self.selected)
 
+        self.shadeLockedCells(self.window, self.lockedCells)
+
         self.drawNumbers(self.window)
 
         self.drawGrid(self.window)
         pygame.display.update()
 
 ##### HELPER FUNCTIONS #####
+    def shadeLockedCells(self, window, locked):
+        for cell in locked:
+            pygame.draw.rect(window, LOCKEDCELLCOLOUR, (cell[0]*cellSize+gridPos[0], cell[1]*cellSize+gridPos[1], cellSize, cellSize))
 
     def drawNumbers(self, window):
         for yidx, row in enumerate(self.grid):
@@ -94,3 +108,19 @@ class App:
         pos[0] += (cellSize-fontWidth)//2
         pos[1] += (cellSize-fontHeight)//2
         window.blit(font, pos)
+
+    def load(self):
+        self.loadButtons()
+
+        # Setting locked cells from original board
+        for yidx, row in enumerate(self.grid):
+            for xidx, num in enumerate(row):
+                if num != 0:
+                    self.lockedCells.append([xidx, yidx])
+
+    def isInt(self, string):
+        try:
+            int(string)
+            return True
+        except:
+            return False
