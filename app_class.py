@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 import pygame, sys, requests
-=======
 import pygame, sys
 import requests
->>>>>>> part9
 from bs4 import BeautifulSoup
 from settings import *
 from buttonClass import *
