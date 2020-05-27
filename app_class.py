@@ -10,8 +10,7 @@ class App:
         pygame.init()
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         self.running = True
-        # self.grid = finishedBoard
-        self.grid = self.getPuzzle("4")
+        self.grid = finishedBoard
         self.selected = None
         self.mousePos = None
         self.state = "playing"
@@ -21,6 +20,8 @@ class App:
         self.lockedCells = []
         self.incorrectCells = []
         self.font = pygame.font.SysFont("arial", cellSize//2)
+        self.grid = []
+        self.getPuzzle("4")
         self.load()
 
     def run(self):
@@ -157,7 +158,6 @@ class App:
 
 ##### HELPER FUNCTIONS #####
     def getPuzzle(self, difficulty):
-        # Defficulty passed in as string with one digit. 1-4
         html_doc = requests.get("https://nine.websudoku.com/?level={}".format(difficulty)).content
         soup = BeautifulSoup(html_doc)
         ids = ['f00', 'f01', 'f02', 'f03', 'f04', 'f05', 'f06', 'f07', 'f08', 'f10', 'f11',
@@ -177,7 +177,8 @@ class App:
                 board[index//9][index%9] = int(cell['value'])
             except:
                 pass
-        return board
+        self.grid = board
+        self.load()
 
     def shadeIncorrectCells(self, window, incorrect):
         for cell in incorrect:
@@ -215,6 +216,26 @@ class App:
                                             function=self.checkAllCells,
                                             colour=(27,142,207),
                                             text="Check"))
+        self.playingButtons.append(Button(  140, 40, WIDTH//7, 40,
+                                            colour=(117,172,112),
+                                            function=self.getPuzzle,
+                                            params="1",
+                                            text="Easy"))
+        self.playingButtons.append(Button(  WIDTH//2-(WIDTH//7)//2, 40, WIDTH//7, 40,
+                                            colour=(204,197,110),
+                                            function=self.getPuzzle,
+                                            params="2",
+                                            text="Medium"))
+        self.playingButtons.append(Button( 380, 40, WIDTH//7, 40,
+                                            colour=(199,129,48),
+                                            function=self.getPuzzle,
+                                            params="3",
+                                            text="Hard"))
+        self.playingButtons.append(Button(  500, 40, WIDTH//7, 40,
+                                            colour=(207,68,68),
+                                            function=self.getPuzzle,
+                                            params="4",
+                                            text="Evil"))
 
     def textToScreen(self, window, text, pos):
         font = self.font.render(text, False, BLACK)
@@ -225,7 +246,11 @@ class App:
         window.blit(font, pos)
 
     def load(self):
+        self.playingButtons = []
         self.loadButtons()
+        self.lockedCells = []
+        self.incorrectCells = []
+        self.finished = False
 
         # Setting locked cells from original board
         for yidx, row in enumerate(self.grid):
