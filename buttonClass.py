@@ -22,3 +22,9 @@ class Button:
     def draw(self, window):
         self.image.fill(self.highlightedColour if self.highlighted else self.colour)
         window.blit(self.image, self.pos)
+
+    def click(self):
+        if self.params:
+            self.functions(self.params)
+        else:
+            self.function()
